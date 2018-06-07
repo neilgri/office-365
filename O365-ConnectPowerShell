@@ -5,19 +5,24 @@ Title:      O365-ConnectPowerShell
 Created by: Neil Grinnall
 ===========================================================================
 .DESCRIPTION
-	- Connects to all five Office 365 services using PowerShell.
+	- Connects to Office 365 service using PowerShell.
 	- Services are:
 		Office 365
-		Skype for Business Online
-		Exchange Online
-		SharePoint Online
-		Security and Compliance Center
-	
+		
 .REQUIREMENTS
-	- An admin account in Office 365 (required for Office 365 service)
-	- 64-bit Windows platform to connect from
-	
-
+	- An admin account in Office 365 (required for Office 365 service).
+	- 64-bit Windows platform to connect from.
+	- The Microsoft Online Service Sign-in Assistant for IT professionals RTW is installled.
+		. Download the installer and execute it.
+	- The Microsoft Azure Active Directory Module for Windows PowerShell is installed.
+		. Open PowerShell as Administrator
+		. Run 'Install-Module MSOnline'
+		. Answer yes if prompted about NuGet
+		. Answer yes if prompted about PSGallery
 .USE
-	- how to execute the script
+	- Open PowerShell as Administrator
+	- Execute the script
 #>
+
+$UserCredential = Get-Credential
+Connect-MsolService -Credential $UserCredential
