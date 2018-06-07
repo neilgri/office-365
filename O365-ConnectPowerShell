@@ -12,6 +12,8 @@ Created by: Neil Grinnall
 .REQUIREMENTS
 	- An admin account in Office 365 (required for Office 365 service).
 	- 64-bit Windows platform to connect from.
+	- The Windows Management Framework 5.1
+		. Not always needed but installing it fixes problem with 'Install-Module' command.
 	- The Microsoft Online Service Sign-in Assistant for IT professionals RTW is installled.
 		. Download the installer and execute it.
 	- The Microsoft Azure Active Directory Module for Windows PowerShell is installed.
