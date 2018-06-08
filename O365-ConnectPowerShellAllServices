@@ -25,10 +25,49 @@ Created by: Neil Grinnall
 		. Run 'Install-Module MSOnline'
 		. Answer yes if prompted about NuGet
 		. Answer yes if prompted about PSGallery
+	- The Microsoft Azure Active Directory V2 module for Windows PowerShell.
+		. Open PowerShell as Administrator
+		. Run 'Install-Module -Name AzureAD'
+		. Answer yes if prompted about PSGallery
+	- The Microsoft SharePoint Online Management Shell.
+		.Download the installer and execute it.
+	- The Microsoft Skype for Business Windows PowerShell module.
+		.Download the installer and execute it.
+		.You may also need the Microsoft Visual C++ Redistributable for Visual Studio 2017
+		
 .USE
 	- Open PowerShell as Administrator
 	- Execute the script
 #>
 
+#Prompt user to specify domain name
+$Domain = Read-Host -Prompt 'Enter the name of your domain (without the TLD)'
+
+#Allow signed scripts to run
+#Set-ExecutionPolicy RemoteSigned
+
+#Capture credentials
 $UserCredential = Get-Credential
+
+#Connect to Office 365 Admin Center
 Connect-MsolService -Credential $UserCredential
+
+#Connect to Azure AD
+Connect-AzureAD -Credential $UserCredential
+
+#Connect to SharePoint Online
+Import-Module Microsoft.Online.SharePoint.PowerShell -DisableNameChecking
+Connect-SPOService -Url https://$domain-admin.sharepoint.com -credential $UserCredential
+
+#Connect to Exchange Online
+$exchangeSession = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri "https://outlook.office365.com/powershell-liveid/" -Credential $UserCredential -Authentication "Basic" -AllowRedirection
+Import-PSSession $exchangeSession
+
+#Connect to Skype for Business Online
+Import-Module SkypeOnlineConnector
+$sfboSession = New-CsOnlineSession -Credential $UserCredential
+Import-PSSession $sfboSession
+
+#Connect to Security and Compliance Center	
+$SccSession = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ps.compliance.protection.outlook.com/powershell-liveid/ -Credential $UserCredential -Authentication "Basic" -AllowRedirection
+Import-PSSession $SccSession -Prefix cc
